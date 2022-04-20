@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Hello() {
     const router = useRouter();
-    const [count, setCount] = useState(Number(router.query.value || 0));
+    const [count, setCount] = useState(Number(0));
     const handlePush = (e) => {
         e.preventDefault();
 
@@ -23,7 +23,12 @@ function Hello() {
         e.preventDefault();
         router.reload();
     };
-
+    useEffect(() => {
+        if (!router.isReady && !router.query.value) {
+            return;
+        }
+        setCount(Number(router.query.value));
+    }, [router.query]);
     return (
         <div>
             <span>hello next js {count}</span>
